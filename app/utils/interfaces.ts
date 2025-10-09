@@ -38,3 +38,10 @@ export interface HeroSectionProps extends Base<"blocks.hero-section"> {
   subHeading: string;
   image: ImageProps;
 }
+
+export interface CartItem {
+  id: number;
+  image: string;
+  name: string;
+  price: number;
+}
