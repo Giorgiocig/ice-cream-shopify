@@ -13,7 +13,6 @@ export const CatalogClient = ({ response, cart }: CatalogClientProps) => {
   const [selectedCategory, setSelectedCategory] = useState("Tutti");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const arrOfProducts: ProductNodeType[] = response.body.data.products.edges;
-  console.log(arrOfProducts);
   const arrOfProductsCleaned = arrOfProducts.map((product) => product.node);
 
   return (
