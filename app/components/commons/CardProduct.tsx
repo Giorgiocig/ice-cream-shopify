@@ -6,8 +6,10 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { CardProductProps } from "@/app/utils/interfaces";
 
-export default function CardProduct({ product }: any) {
+export default function CardProduct({ product, cart }: CardProductProps) {
+  console.log();
   return (
     <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 overflow-hidden group">
       {/* Image Section */}

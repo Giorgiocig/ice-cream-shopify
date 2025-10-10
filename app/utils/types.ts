@@ -1,3 +1,5 @@
+import CardProduct from "../components/commons/CardProduct";
+
 export interface LinkProps {
   id: number;
   text: string;
@@ -57,3 +59,16 @@ export type bestFlavor = {
   name: string;
   descritpion: string;
 };
+
+export type ProductType = {
+  description: string;
+  images: any;
+  priceRange: any;
+  title: string;
+};
+
+export type Node<T> = {
+  node: T;
+};
+
+export type ProductNodeType = Node<ProductType>;

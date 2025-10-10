@@ -5,23 +5,16 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Filter, Grid, List } from "lucide-react";
 import CardProduct from "../commons/CardProduct";
+import { categories } from "@/app/utils/constants";
+import { ProductNodeType, ProductType } from "@/app/utils/types";
+import { CatalogClientProps } from "@/app/utils/interfaces";
 
-const categories = [
-  "Tutti",
-  "Classici",
-  "Premium",
-  "Frutta",
-  "Sorbetti",
-  "Speciali",
-];
-
-export const CatalogClient = ({ response }: any) => {
+export const CatalogClient = ({ response, cart }: CatalogClientProps) => {
   const [selectedCategory, setSelectedCategory] = useState("Tutti");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const arrOfProducts = response.body.data.products.edges;
-  const arrOfProductsCleaned = arrOfProducts.map(
-    (product: Record<string, any>) => product.node
-  );
+  const arrOfProducts: ProductNodeType[] = response.body.data.products.edges;
+  console.log(arrOfProducts);
+  const arrOfProductsCleaned = arrOfProducts.map((product) => product.node);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-orange-25 to-blue-50">
@@ -80,11 +73,9 @@ export const CatalogClient = ({ response }: any) => {
               : "grid-cols-1 lg:grid-cols-2"
           }`}
         >
-          {arrOfProductsCleaned.map(
-            (product: Record<string, any>, idx: number) => (
-              <CardProduct key={idx} product={product} />
-            )
-          )}
+          {arrOfProductsCleaned.map((product, idx: number) => (
+            <CardProduct key={idx} product={product} cart={cart} />
+          ))}
         </div>
       </div>
     </div>

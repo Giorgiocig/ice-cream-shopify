@@ -3,10 +3,9 @@ import { getAllProducts } from "../storefrontApi";
 import { createCart } from "../storefrontApi/createCart";
 
 const Catalog = async () => {
-  // const cart = await createCart({});
-  // console.log(cart);
+  const cart = await createCart({});
   const response = await getAllProducts();
-  return <CatalogClient response={response} />;
+  return <CatalogClient response={response} cart={cart} />;
 };
 
 export default Catalog;

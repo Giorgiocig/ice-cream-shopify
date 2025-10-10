@@ -1,4 +1,4 @@
-import { shopifyFetch } from "@/utils/fetch-shopify";
+import { shopifyFetch } from "../utils/fetch-shopify";
 
 const gql = String.raw;
 

@@ -1,4 +1,4 @@
-import { bestFlavor } from "./types";
+import { bestFlavor, ProductType } from "./types";
 
 export interface ImageProps {
   id: number;
@@ -44,4 +44,14 @@ export interface CartItem {
   image: string;
   name: string;
   price: number;
+}
+
+export interface CatalogClientProps {
+  response: Record<string, any>;
+  cart: Record<string, any>;
+}
+
+export interface CardProductProps {
+  cart: Record<string, any>;
+  product: ProductType;
 }
