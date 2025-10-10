@@ -1,5 +1,3 @@
-import CardProduct from "../components/commons/CardProduct";
-
 export interface LinkProps {
   id: number;
   text: string;
@@ -72,3 +70,7 @@ export type Node<T> = {
 };
 
 export type ProductNodeType = Node<ProductType>;
+
+export type CartType = {
+  cart: Record<string, any>;
+};
