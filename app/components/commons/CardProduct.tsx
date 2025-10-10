@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -8,7 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { CardProductProps } from "@/app/utils/interfaces";
 
-export default function CardProduct({ product, cart }: CardProductProps) {
+export const CardProduct = ({ product }: CardProductProps) => {
   return (
     <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 overflow-hidden group">
       {/* Image Section */}
@@ -46,4 +46,4 @@ export default function CardProduct({ product, cart }: CardProductProps) {
       </CardFooter>
     </Card>
   );
-}
+};
