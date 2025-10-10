@@ -48,10 +48,8 @@ export interface CartItem {
 
 export interface CatalogClientProps {
   response: Record<string, any>;
-  cart: Record<string, any>;
 }
 
 export interface CardProductProps {
-  cart: Record<string, any>;
   product: ProductType;
 }
