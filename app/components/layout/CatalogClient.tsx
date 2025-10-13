@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Filter, Grid, List } from "lucide-react";
+import { Grid, List } from "lucide-react";
 import { CardProduct } from "../commons/CardProduct";
 import { categories } from "@/app/utils/constants";
-import { ProductNodeType, ProductType } from "@/app/utils/types";
+import { ProductNodeType } from "@/app/utils/types";
 import { CatalogClientProps } from "@/app/utils/interfaces";
 import { useCart } from "@/app/hooks";
 
@@ -23,8 +23,7 @@ export const CatalogClient = ({ response }: CatalogClientProps) => {
       setCartId(data.id);
     }
     !cartId && createShopCart();
-  });
-
+  }, []);
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-orange-25 to-blue-50">
       <div className="container mx-auto px-4 py-8">
