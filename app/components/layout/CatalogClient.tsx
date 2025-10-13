@@ -1,19 +1,29 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Filter, Grid, List } from "lucide-react";
-import CardProduct from "../commons/CardProduct";
+import { CardProduct } from "../commons/CardProduct";
 import { categories } from "@/app/utils/constants";
 import { ProductNodeType, ProductType } from "@/app/utils/types";
 import { CatalogClientProps } from "@/app/utils/interfaces";
+import { useCart } from "@/app/hooks";
 
-export const CatalogClient = ({ response, cart }: CatalogClientProps) => {
+export const CatalogClient = ({ response }: CatalogClientProps) => {
   const [selectedCategory, setSelectedCategory] = useState("Tutti");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const arrOfProducts: ProductNodeType[] = response.body.data.products.edges;
   const arrOfProductsCleaned = arrOfProducts.map((product) => product.node);
+  const { cartId, cart, setCartId } = useCart();
+  useEffect(() => {
+    async function createShopCart() {
+      const res = await fetch("/api/cart/create", { method: "POST" });
+      const data = await res.json();
+      setCartId(data.id);
+    }
+    !cartId && createShopCart();
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-orange-25 to-blue-50">
@@ -73,7 +83,7 @@ export const CatalogClient = ({ response, cart }: CatalogClientProps) => {
           }`}
         >
           {arrOfProductsCleaned.map((product, idx: number) => (
-            <CardProduct key={idx} product={product} cart={cart} />
+            <CardProduct key={idx} product={product} />
           ))}
         </div>
       </div>
