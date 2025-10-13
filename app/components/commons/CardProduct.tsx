@@ -7,8 +7,35 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CardProductProps } from "@/app/utils/interfaces";
+import { useCart } from "@/app/hooks";
 
 export const CardProduct = ({ product }: CardProductProps) => {
+  const { cartId, cart, setCartId, setCart } = useCart();
+
+  const merchandiseId = product.variants.nodes[0].id;
+  const lines = [{ merchandiseId, quantity: 1 }];
+  const handleClick = () => {
+    async function addItemToCart() {
+      try {
+        const res = await fetch("/api/cart/add", {
+          method: "POST",
+          body: JSON.stringify({ cartId, lines }),
+          headers: { "Content-Type": "application/json" },
+        });
+        const data = await res.json();
+        const { cart, userErrors } = data.body.data.cartLinesAdd;
+        if (userErrors.length === 0) setCart(cart);
+        else {
+          console.log("Errore aggiungendo al carrello:", userErrors);
+          alert(userErrors[0].message);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    addItemToCart();
+  };
+
   return (
     <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 overflow-hidden group">
       {/* Image Section */}
@@ -42,7 +69,7 @@ export const CardProduct = ({ product }: CardProductProps) => {
       </CardContent>
 
       <CardFooter className="pt-0">
-        <Button onClick={() => console.log("oisjdf")}>CLICK TO ORDER</Button>
+        <Button onClick={handleClick}>CLICK TO ORDER</Button>
       </CardFooter>
     </Card>
   );
