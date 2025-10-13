@@ -63,6 +63,7 @@ export type ProductType = {
   images: any;
   priceRange: any;
   title: string;
+  variants: Record<string, any>;
 };
 
 export type Node<T> = {
@@ -73,4 +74,7 @@ export type ProductNodeType = Node<ProductType>;
 
 export type CartType = {
   cart: Record<string, any>;
+  lines?: {
+    edges: Array<any>;
+  };
 };
