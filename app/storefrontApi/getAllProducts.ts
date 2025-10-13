@@ -16,6 +16,11 @@ export async function getAllProducts() {
                   currencyCode
                 }
               }
+              variants(first: 1) {
+                nodes {
+                  id
+                }
+              }
               images(first: 1) {
                 nodes {
                   src
