@@ -1,3 +1,4 @@
+"use client";
 import { Minus, Plus, Trash2, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,12 +9,15 @@ import {
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { CartItem } from "@/app/utils/interfaces";
+import { useCart } from "@/app/hooks";
 
 export function Cart() {
   //placeholder
   const items: CartItem[] = [];
-
-  if (items.length === 0) {
+  const { cartId, cart, setCartId, setCart } = useCart();
+  const cartItems = cart?.lines?.edges;
+  cartItems && console.log(cartItems[0].node);
+  if (cartItems?.length === 0) {
     return (
       <SheetContent>
         <SheetHeader>
@@ -29,26 +33,34 @@ export function Cart() {
   return (
     <SheetContent className="flex flex-col">
       <SheetHeader>
-        <SheetTitle>Carrello ({items.length} prodotti)</SheetTitle>
+        <SheetTitle>
+          Carrello ({cartItems?.length} prodott
+          {`${cartItems?.length === 1 ? "o" : "i"}`})
+        </SheetTitle>
       </SheetHeader>
 
       <div className="flex-1 overflow-auto">
         <div className="space-y-4">
-          {items.map((item) => (
+          {cartItems?.map((item) => (
             <div
               key={item.id}
               className="flex items-center space-x-4 p-4 border rounded-lg"
             >
-              <img
+              {/* <img
                 src={item.image}
                 alt={item.name}
                 className="h-16 w-16 rounded-md object-cover"
-              />
+              /> */}
 
               <div className="flex-1">
-                <h3 className="font-medium">{item.name}</h3>
+                <h3 className="font-medium">
+                  {item.node.merchandise.product.title}
+                </h3>
                 <p className="text-sm text-muted-foreground">
-                  €{item.price.toFixed(2)}
+                  {item.node.quantity * item.node.merchandise.price.amount} €
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  quantita : {item.node.quantity}
                 </p>
 
                 <div className="flex items-center space-x-2 mt-2">
