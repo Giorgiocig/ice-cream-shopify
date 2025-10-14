@@ -52,4 +52,5 @@ export interface CatalogClientProps {
 
 export interface CardProductProps {
   product: ProductType;
+  setIsOpen: (arg: boolean) => void;
 }
