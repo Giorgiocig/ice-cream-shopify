@@ -54,9 +54,9 @@ export function Cart() {
 
       <div className="flex-1 overflow-auto">
         <div className="space-y-4">
-          {cartItems?.map((item) => (
+          {cartItems?.map((item, idx) => (
             <div
-              key={item.id}
+              key={idx}
               className="flex items-center space-x-4 p-4 border rounded-lg"
             >
               {/* <img
