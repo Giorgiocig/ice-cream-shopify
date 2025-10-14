@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { CardProductProps } from "@/app/utils/interfaces";
 import { useCart } from "@/app/hooks";
 
-export const CardProduct = ({ product }: CardProductProps) => {
+export const CardProduct = ({ product, setIsOpen }: CardProductProps) => {
   const { cartId, cart, setCartId, setCart } = useCart();
 
   const merchandiseId = product.variants.nodes[0].id;
@@ -24,8 +24,9 @@ export const CardProduct = ({ product }: CardProductProps) => {
       });
       const data = await res.json();
       const { cart, userErrors } = data.body.data.cartLinesAdd;
-      if (userErrors.length === 0) setCart(cart);
-      else {
+      if (userErrors.length === 0) {
+        setCart(cart), setIsOpen(true);
+      } else {
         console.log("Errore aggiungendo al carrello:", userErrors);
         alert(userErrors[0].message);
       }
@@ -46,7 +47,6 @@ export const CardProduct = ({ product }: CardProductProps) => {
           height={300}
         /> */}
       </div>
-
       <CardHeader className="pb-3">
         <div className="flex justify-between items-start">
           <h3 className="text-lg font-bold text-gray-800 leading-tight">
@@ -59,13 +59,11 @@ export const CardProduct = ({ product }: CardProductProps) => {
           </div>
         </div>
       </CardHeader>
-
       <CardContent>
         <p className="text-gray-600 text-sm leading-relaxed">
           {product.description}
         </p>
       </CardContent>
-
       <CardFooter className="pt-0">
         <Button className="cursor-pointer" onClick={handleClick}>
           CLICK TO ORDER
