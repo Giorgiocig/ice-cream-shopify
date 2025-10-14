@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Card,
   CardContent,
@@ -14,26 +14,24 @@ export const CardProduct = ({ product }: CardProductProps) => {
 
   const merchandiseId = product.variants.nodes[0].id;
   const lines = [{ merchandiseId, quantity: 1 }];
-  const handleClick = () => {
-    async function addItemToCart() {
-      try {
-        const res = await fetch("/api/cart/add", {
-          method: "POST",
-          body: JSON.stringify({ cartId, lines }),
-          headers: { "Content-Type": "application/json" },
-        });
-        const data = await res.json();
-        const { cart, userErrors } = data.body.data.cartLinesAdd;
-        if (userErrors.length === 0) setCart(cart);
-        else {
-          console.log("Errore aggiungendo al carrello:", userErrors);
-          alert(userErrors[0].message);
-        }
-      } catch (error) {
-        console.log(error);
+
+  const handleClick = async () => {
+    try {
+      const res = await fetch("/api/cart/add", {
+        method: "POST",
+        body: JSON.stringify({ cartId, lines }),
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await res.json();
+      const { cart, userErrors } = data.body.data.cartLinesAdd;
+      if (userErrors.length === 0) setCart(cart);
+      else {
+        console.log("Errore aggiungendo al carrello:", userErrors);
+        alert(userErrors[0].message);
       }
+    } catch (error) {
+      console.log(error);
     }
-    addItemToCart();
   };
 
   return (
@@ -69,7 +67,9 @@ export const CardProduct = ({ product }: CardProductProps) => {
       </CardContent>
 
       <CardFooter className="pt-0">
-        <Button onClick={handleClick}>CLICK TO ORDER</Button>
+        <Button className="cursor-pointer" onClick={handleClick}>
+          CLICK TO ORDER
+        </Button>
       </CardFooter>
     </Card>
   );
