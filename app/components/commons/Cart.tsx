@@ -8,15 +8,28 @@ import {
   SheetFooter,
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
-import { CartItem } from "@/app/utils/interfaces";
 import { useCart } from "@/app/hooks";
 
 export function Cart() {
-  //placeholder
-  const items: CartItem[] = [];
   const { cartId, cart, setCartId, setCart } = useCart();
   const cartItems = cart?.lines?.edges;
-  cartItems && console.log(cartItems[0].node);
+
+  const handleClickDelete = async (lineId: string) => {
+    try {
+      const res = await fetch("/api/cart/delete", {
+        method: "POST",
+        body: JSON.stringify({ cartId, lineIds: [lineId] }),
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await res.json();
+      if (!res.ok) throw Error("Failed to Delete");
+      console.log(data.body.data.cartLinesRemove.cart);
+      cart && setCart(data.body.data.cartLinesRemove.cart);
+    } catch (error) {
+      console.log("Error while deleting");
+    }
+  };
+
   if (cartItems?.length === 0) {
     return (
       <SheetContent>
@@ -62,7 +75,6 @@ export function Cart() {
                 <p className="text-sm text-muted-foreground">
                   quantita : {item.node.quantity}
                 </p>
-
                 <div className="flex items-center space-x-2 mt-2">
                   <Button
                     variant="outline"
@@ -95,7 +107,7 @@ export function Cart() {
                   variant="outline"
                   size="icon"
                   className="h-8 w-8"
-                  onClick={() => console.log("remove item")}
+                  onClick={() => handleClickDelete(item.node.id)}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
