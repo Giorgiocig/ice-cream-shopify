@@ -8,7 +8,8 @@ import { CardProduct } from "../commons/CardProduct";
 import { categories } from "@/app/utils/constants";
 import { ProductNodeType } from "@/app/utils/types";
 import { CatalogClientProps } from "@/app/utils/interfaces";
-import { useCart } from "@/app/hooks";
+import { useCart, useToggle } from "@/app/hooks";
+import Dialog from "../commons/Dialog";
 
 export const CatalogClient = ({ response }: CatalogClientProps) => {
   const [selectedCategory, setSelectedCategory] = useState("Tutti");
@@ -16,6 +17,7 @@ export const CatalogClient = ({ response }: CatalogClientProps) => {
   const arrOfProducts: ProductNodeType[] = response.body.data.products.edges;
   const arrOfProductsCleaned = arrOfProducts.map((product) => product.node);
   const { cartId, cart, setCartId } = useCart();
+  const [value, setToggle] = useToggle(false);
   useEffect(() => {
     async function createShopCart() {
       const res = await fetch("/api/cart/create", { method: "POST" });
@@ -37,7 +39,6 @@ export const CatalogClient = ({ response }: CatalogClientProps) => {
             ingredienti di prima qualità
           </p>
         </div>
-
         {/* Filters */}
         <div className="flex flex-col lg:flex-row justify-between items-center mb-8 space-y-4 lg:space-y-0">
           <div className="flex flex-wrap gap-2">
@@ -82,10 +83,15 @@ export const CatalogClient = ({ response }: CatalogClientProps) => {
           }`}
         >
           {arrOfProductsCleaned.map((product, idx: number) => (
-            <CardProduct key={idx} product={product} />
+            <CardProduct key={idx} product={product} setIsOpen={setToggle} />
           ))}
         </div>
       </div>
+      <Dialog
+        setIsOpen={setToggle}
+        open={value}
+        messageText="Il prodotto é stato aggiunto"
+      />
     </div>
   );
 };
