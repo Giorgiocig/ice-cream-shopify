@@ -23,8 +23,8 @@ export function Navbar() {
 
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="relative">
-                <ShoppingCart className="h-4 w-4" />
+              <Button variant="outline" size="icon">
+                <ShoppingCart className="h-4 w-4 " />
               </Button>
             </SheetTrigger>
             <Cart />
