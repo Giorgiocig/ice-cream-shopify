@@ -21,12 +21,31 @@ export function Cart() {
         body: JSON.stringify({ cartId, lineIds: [lineId] }),
         headers: { "Content-Type": "application/json" },
       });
-      const data = await res.json();
       if (!res.ok) throw Error("Failed to Delete");
-      console.log(data.body.data.cartLinesRemove.cart);
-      cart && setCart(data.body.data.cartLinesRemove.cart);
+      const data = await res.json();
+      setCart(data.body.data.cartLinesRemove.cart);
     } catch (error) {
       console.log("Error while deleting");
+    }
+  };
+
+  const handleClickUpdateQuantity = async (
+    line: Record<string, any>,
+    increase: boolean = true
+  ) => {
+    const { id, quantity } = line;
+    const obj = { id, quantity: increase ? quantity + 1 : quantity - 1 };
+    try {
+      const res = await fetch("/api/cart/update", {
+        method: "POST",
+        body: JSON.stringify({ cartId, lines: [obj] }),
+        headers: { "Content-Type": "application/json" },
+      });
+      if (!res.ok) throw Error("Failed to Update");
+      const data = await res.json();
+      setCart(data.body.data.cartLinesUpdate.cart);
+    } catch (error) {
+      console.log("Error while updating", error);
     }
   };
 
@@ -42,7 +61,6 @@ export function Cart() {
       </SheetContent>
     );
   }
-
   return (
     <SheetContent className="flex flex-col">
       <SheetHeader>
@@ -72,26 +90,23 @@ export function Cart() {
                 <p className="text-sm text-muted-foreground">
                   {item.node.quantity * item.node.merchandise.price.amount} €
                 </p>
-                <p className="text-sm text-muted-foreground">
-                  quantita : {item.node.quantity}
-                </p>
                 <div className="flex items-center space-x-2 mt-2">
                   <Button
                     variant="outline"
                     size="icon"
                     className="h-8 w-8"
-                    onClick={() => console.log("update quantity")}
+                    onClick={() => handleClickUpdateQuantity(item.node, false)}
                   >
                     <Minus className="h-4 w-4" />
                   </Button>
 
-                  {/* <span className="w-8 text-center">{item.quantity}</span> */}
+                  <span className="w-8 text-center">{item.node.quantity}</span>
 
                   <Button
                     variant="outline"
                     size="icon"
                     className="h-8 w-8"
-                    onClick={() => console.log("decrease quantity")}
+                    onClick={() => handleClickUpdateQuantity(item.node)}
                   >
                     <Plus className="h-4 w-4" />
                   </Button>
