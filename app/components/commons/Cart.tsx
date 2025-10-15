@@ -9,10 +9,12 @@ import {
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/app/hooks";
+import { computeTotal } from "@/app/utils/helpers";
 
 export function Cart() {
   const { cartId, cart, setCartId, setCart } = useCart();
   const cartItems = cart?.lines?.edges;
+  const total = computeTotal(cartItems);
 
   const handleClickDelete = async (lineId: string) => {
     try {
@@ -34,11 +36,13 @@ export function Cart() {
     increase: boolean = true
   ) => {
     const { id, quantity } = line;
-    const obj = { id, quantity: increase ? quantity + 1 : quantity - 1 };
     try {
       const res = await fetch("/api/cart/update", {
         method: "POST",
-        body: JSON.stringify({ cartId, lines: [obj] }),
+        body: JSON.stringify({
+          cartId,
+          lines: [{ id, quantity: increase ? quantity + 1 : quantity - 1 }],
+        }),
         headers: { "Content-Type": "application/json" },
       });
       if (!res.ok) throw Error("Failed to Update");
@@ -135,9 +139,9 @@ export function Cart() {
       <div className="space-y-4">
         <Separator />
 
-        <div className="flex justify-between text-lg font-semibold">
+        <div className="flex justify-between text-lg font-semibold px-4">
           <span>Totale:</span>
-          <span>€{"compute total"}</span>
+          <span>€ {total}</span>
         </div>
 
         <SheetFooter className="flex-col space-y-2">
