@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     }
     return NextResponse.json(cartRes);
   } catch (error) {
-    console.error("Error creating cart:", error);
+    console.error("Error deleting item:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
