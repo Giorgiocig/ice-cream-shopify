@@ -1,14 +1,20 @@
+"use client";
 import { ShoppingCart, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { Cart } from "./Cart";
+import { usePathname } from "next/navigation";
 
-import { CartItem } from "@/app/utils/interfaces";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export function Navbar() {
-  const items: CartItem[] = [];
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
 
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
   return (
     <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between mx-auto">
@@ -21,7 +27,7 @@ export function Navbar() {
             <Button variant="ghost">Catalogo</Button>
           </Link>
 
-          <Sheet>
+          <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button variant="outline" size="icon">
                 <ShoppingCart className="h-4 w-4 " />
