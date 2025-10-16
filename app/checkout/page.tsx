@@ -150,7 +150,7 @@ export default function page({}: Props) {
             </CardContent>
             <CardFooter className="flex flex-col gap-2">
               <Button className="w-full cursor-pointer" size="lg">
-                Proceed with the order and payment
+                <Link href="/payment">Proceed with the order and payment</Link>
               </Button>
               <Button variant="outline" className="w-full cursor-pointer">
                 <Link href="/catalog">Continue to shop</Link>
