@@ -53,6 +53,22 @@ export function Cart() {
     }
   };
 
+  const handleClickEmpyCart = async () => {
+    const cartItemIdArray: string[] | undefined = cartItems?.map(
+      (item: Record<string, any>) => item.node.id
+    );
+    try {
+      const res = await fetch("/api/cart/delete", {
+        method: "POST",
+        body: JSON.stringify({ cartId, lineIds: cartItemIdArray }),
+        headers: { "Content-Type": "application/json" },
+      });
+      if (!res.ok) throw Error("Failed to empty cart");
+      const data = await res.json();
+      setCart(data.body.data.cartLinesRemove.cart);
+    } catch (error) {}
+  };
+
   if (cartItems?.length === 0) {
     return (
       <SheetContent>
@@ -149,7 +165,7 @@ export function Cart() {
           <Button
             variant="outline"
             className="w-full"
-            onClick={() => console.log("clear cart")}
+            onClick={() => handleClickEmpyCart()}
           >
             Svuota Carrello
           </Button>
