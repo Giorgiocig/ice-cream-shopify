@@ -86,18 +86,14 @@ export function HeroSection() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
             <Button
-              size="lg"
-              className="group bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
-            >
-              <ShoppingCart className="w-5 h-5 mr-2 group-hover:animate-bounce" />
-              Aggiungi un gusto
-            </Button>
-            <Button
               variant="outline"
               size="lg"
-              className="group border-2 border-blue-300 text-blue-600 hover:bg-blue-50"
+              className="group bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 w-full cursor-pointer"
             >
-              <Link href="/catalog">Scopri Menu Completo</Link>
+              <Link href="/catalog" className="flex">
+                <ShoppingCart className="w-5 h-5 mr-2 group-hover:animate-bounce" />
+                Scopri Menu Completo
+              </Link>
             </Button>
           </div>
 
