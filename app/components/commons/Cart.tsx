@@ -8,79 +8,17 @@ import {
   SheetFooter,
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
-import { useCart } from "@/app/hooks";
+import { useCart, useCartOperations } from "@/app/hooks";
 import { computeTotal } from "@/app/utils/helpers";
+import Link from "next/link";
 
 export function Cart() {
   const { cartId, cart, setCartId, setCart } = useCart();
   const cartItems = cart?.lines?.edges;
   const total = computeTotal(cartItems);
+  const { handleClickDelete, handleClickUpdateQuantity, handleClickEmptyCart } =
+    useCartOperations();
 
-  const handleClickDelete = async (lineId: string) => {
-    try {
-      const res = await fetch("/api/cart/delete", {
-        method: "POST",
-        body: JSON.stringify({ cartId, lineIds: [lineId] }),
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!res.ok) throw Error("Failed to Delete");
-      const data = await res.json();
-      setCart(data.body.data.cartLinesRemove.cart);
-    } catch (error) {
-      console.log("Error while deleting");
-    }
-  };
-
-  const handleClickUpdateQuantity = async (
-    line: Record<string, any>,
-    increase: boolean = true
-  ) => {
-    const { id, quantity } = line;
-    try {
-      const res = await fetch("/api/cart/update", {
-        method: "POST",
-        body: JSON.stringify({
-          cartId,
-          lines: [{ id, quantity: increase ? quantity + 1 : quantity - 1 }],
-        }),
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!res.ok) throw Error("Failed to Update");
-      const data = await res.json();
-      setCart(data.body.data.cartLinesUpdate.cart);
-    } catch (error) {
-      console.log("Error while updating", error);
-    }
-  };
-
-  const handleClickEmpyCart = async () => {
-    const cartItemIdArray: string[] | undefined = cartItems?.map(
-      (item: Record<string, any>) => item.node.id
-    );
-    try {
-      const res = await fetch("/api/cart/delete", {
-        method: "POST",
-        body: JSON.stringify({ cartId, lineIds: cartItemIdArray }),
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!res.ok) throw Error("Failed to empty cart");
-      const data = await res.json();
-      setCart(data.body.data.cartLinesRemove.cart);
-    } catch (error) {}
-  };
-
-  if (cartItems?.length === 0) {
-    return (
-      <SheetContent>
-        <SheetHeader>
-          <SheetTitle>Carrello</SheetTitle>
-        </SheetHeader>
-        <div className="flex flex-col items-center justify-center h-full">
-          <p className="text-muted-foreground">Il carrello è vuoto</p>
-        </div>
-      </SheetContent>
-    );
-  }
   return (
     <SheetContent className="flex flex-col">
       <SheetHeader>
@@ -161,11 +99,16 @@ export function Cart() {
         </div>
 
         <SheetFooter className="flex-col space-y-2">
-          <Button className="w-full">Procedi al Checkout</Button>
+          <Button
+            className="w-full cursor-pointer"
+            disabled={cartItems ? false : true}
+          >
+            <Link href="/checkout">Procedi al pagamento</Link>
+          </Button>
           <Button
             variant="outline"
             className="w-full"
-            onClick={() => handleClickEmpyCart()}
+            onClick={() => cartItems && handleClickEmptyCart(cartItems)}
           >
             Svuota Carrello
           </Button>
